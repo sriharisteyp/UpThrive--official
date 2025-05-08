@@ -64,13 +64,30 @@ export default function SignupWithOtp({ onToggle }: { onToggle: () => void }) {
       const data = await response.json();
 
       if (response.ok) {
-        toast({ title: "OTP Sent", description: data.message, variant: "success" });
+        toast({ 
+          title: "Account Created", 
+          description: "Please verify your email with the OTP sent to your inbox", 
+          variant: "success" 
+        });
+        
+        // Move to OTP verification step
         setStep("otp");
       } else {
-        toast({ title: "Signup Failed", description: data.message, variant: "destructive" });
+        // Handle specific error messages
+        if (data.username) {
+          toast({ title: "Username Error", description: data.username[0], variant: "destructive" });
+        } else if (data.email) {
+          toast({ title: "Email Error", description: data.email[0], variant: "destructive" });
+        } else if (data.password) {
+          toast({ title: "Password Error", description: data.password[0], variant: "destructive" });
+        } else if (data.error) {
+          toast({ title: "Error", description: data.error, variant: "destructive" });
+        } else {
+          toast({ title: "Signup Failed", description: "Please check your information and try again", variant: "destructive" });
+        }
       }
     } catch {
-      toast({ title: "Error", description: "Something went wrong.", variant: "destructive" });
+      toast({ title: "Error", description: "Something went wrong with the server", variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }
@@ -89,10 +106,20 @@ export default function SignupWithOtp({ onToggle }: { onToggle: () => void }) {
 
       if (response.ok) {
         toast({ title: "Verified", description: "Logged in successfully", variant: "success" });
-        // Store tokens in localStorage
+        
+        // Store user data in localStorage
+        localStorage.setItem("careerGuidanceUser", JSON.stringify({
+          email: userData.email,
+          username: userData.username,
+          token: data.access
+        }));
+
+        // Store tokens
         localStorage.setItem("access", data.access);
         localStorage.setItem("refresh", data.refresh);
-        navigate("/dashboard");
+        
+        // Use window.location.href for a full page refresh and redirect
+        window.location.href = "/dashboard";
       } else {
         toast({ title: "Invalid OTP", description: data.message, variant: "destructive" });
       }
@@ -154,15 +181,6 @@ export default function SignupWithOtp({ onToggle }: { onToggle: () => void }) {
                 type="email"
                 value={userData.email}
                 onChange={(e) => setUserData({ ...userData, email: e.target.value })}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Country</Label>
-              <Input
-                id="Country"
-                placeholder="Enter Your Country"
-                type=""
                 required
               />
             </div>
