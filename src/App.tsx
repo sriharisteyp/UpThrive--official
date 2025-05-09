@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,7 +14,8 @@ import Careers from "./pages/Careers";
 import CareerDetail from "./pages/CareerDetail";
 import Dashboard from "./pages/Dashboard";
 import AboutUs from "./pages/AboutUs";
-import PricingCard from "./pages/Pricing"
+import PricingCard from "./pages/Pricing";
+import InterviewTraining from "./pages/InterviewTraining";
 import NotFound from "./pages/NotFound";
 import { Footer } from "./components/layout/Footer";
 
@@ -42,6 +42,7 @@ const App = () => (
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/about-us" element={<AboutUs />} />
                       <Route path="/pricing" element={<PricingCard />} />
+                      <Route path="/interview-training" element={<InterviewTraining />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </div>
