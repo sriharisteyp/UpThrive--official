@@ -643,17 +643,17 @@ const Dashboard = () => {
                           const status = userData.roadmapProgress?.[item.title] || 'not-started';
                           return (
                             <div key={item.title} className="bg-muted/40 rounded-lg p-4">
-                              <div className="flex justify-between items-start gap-4">
+                              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                                 <div className="flex-1">
                                   <h4 className="font-medium mb-1">{item.title}</h4>
-                                  <p className="text-sm text-muted-foreground">{item.description}</p>
+                                  <p className="text-sm text-muted-foreground break-words">{item.description}</p>
                                   {item.timeframe && (
                                     <p className="text-xs text-muted-foreground mt-1">
                                       Estimated timeframe: {item.timeframe}
                                     </p>
                                   )}
                                 </div>
-                                <div className="flex flex-col items-end gap-2">
+                                <div className="flex flex-col items-start sm:items-end gap-2 mt-2 sm:mt-0">
                                   <Badge 
                                     variant={status === 'completed' ? 'default' : 
                                            status === 'in-progress' ? 'secondary' : 

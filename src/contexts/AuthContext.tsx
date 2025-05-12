@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const { toast } = useToast();
 
   const api = axios.create({
-    baseURL: "https://dreampilot.pythonanywhere.com/api/",
+    baseURL: "http://127.0.0.1:8000/api/",
   });
 
   useEffect(() => {

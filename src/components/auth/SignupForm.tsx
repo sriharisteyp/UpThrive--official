@@ -47,10 +47,10 @@ export default function SignupWithOtp({ onToggle }: { onToggle: () => void }) {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validatePassword()) return;
-
+  
     setIsSubmitting(true);
     try {
-      const response = await fetch("https://dreampilot.pythonanywhere.com/api/auth/register/", {
+      const response = await fetch("http://127.0.0.1:8000/api/auth/register/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -60,43 +60,107 @@ export default function SignupWithOtp({ onToggle }: { onToggle: () => void }) {
           password2: userData.confirmPassword,
         }),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
-        toast({ 
-          title: "Account Created", 
-          description: "Please verify your email with the OTP sent to your inbox", 
-          variant: "success" 
+        toast({
+          title: "Account Created",
+          description: "Please verify your email with the OTP sent to your inbox",
+          variant: "success",
         });
-        
+  
+        // Create the subscription only if signup is successful
+        try {
+          const subscriptionResponse = await fetch(
+            "http://127.0.0.1:8000/api/subscriptions/subscriptions/",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                username: userData.username, // Pass username
+                plan: "free", // Assign the 'free' plan
+                is_active: true, // Set active status
+                end_date: null, // No end date for free plan initially
+              }),
+            }
+          );
+  
+          const subscriptionData = await subscriptionResponse.json();
+  
+          if (subscriptionResponse.ok) {
+            toast({
+              title: "Subscription Added",
+              description: "Your free subscription has been activated.",
+              variant: "success",
+            });
+          }
+        } catch {
+          console.error("Subscription creation failed silently.");
+        }
+  
         // Move to OTP verification step
         setStep("otp");
       } else {
-        // Handle specific error messages
+        // Handle specific error messages and clear form data on failure
+        setUserData({
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+  
         if (data.username) {
-          toast({ title: "Username Error", description: data.username[0], variant: "destructive" });
+          toast({
+            title: "Username Error",
+            description: data.username[0],
+            variant: "destructive",
+          });
         } else if (data.email) {
-          toast({ title: "Email Error", description: data.email[0], variant: "destructive" });
+          toast({
+            title: "Email Error",
+            description: data.email[0],
+            variant: "destructive",
+          });
         } else if (data.password) {
-          toast({ title: "Password Error", description: data.password[0], variant: "destructive" });
+          toast({
+            title: "Password Error",
+            description: data.password[0],
+            variant: "destructive",
+          });
         } else if (data.error) {
-          toast({ title: "Error", description: data.error, variant: "destructive" });
+          toast({
+            title: "Error",
+            description: data.error,
+            variant: "destructive",
+          });
         } else {
-          toast({ title: "Signup Failed", description: "Please check your information and try again", variant: "destructive" });
+          toast({
+            title: "Signup Failed",
+            description: "Please check your information and try again",
+            variant: "destructive",
+          });
         }
       }
     } catch {
-      toast({ title: "Error", description: "Something went wrong with the server", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: "Something went wrong with the server",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
+  
+  
 
   const handleVerifyOtp = async () => {
     setIsSubmitting(true);
     try {
-      const response = await fetch("https://dreampilot.pythonanywhere.com/api/auth/verify-otp/", {
+      const response = await fetch("http://127.0.0.1:8000/api/auth/verify-otp/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: userData.email, otp }),
@@ -132,7 +196,7 @@ export default function SignupWithOtp({ onToggle }: { onToggle: () => void }) {
 
   const handleResendOtp = async () => {
     try {
-      const res = await fetch("https://dreampilot.pythonanywhere.com/api/auth/resend-otp/", {
+      const res = await fetch("http://127.0.0.1:8000/api/auth/resend-otp/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: userData.email }),
@@ -146,6 +210,37 @@ export default function SignupWithOtp({ onToggle }: { onToggle: () => void }) {
       }
     } catch {
       toast({ title: "Error", description: "Could not resend OTP.", variant: "destructive" });
+    }
+  };
+
+  const upgradePlan = async () => {
+    const upgradeResponse = await fetch("http://127.0.0.1:8000/api/subscriptions/subscriptions/", {
+      method: "PATCH",  // or PUT, depending on your API design
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: userData.username,  // Same user
+        plan: "premium",  // Upgrade to premium plan
+        is_active: true,
+        end_date: new Date().toISOString(), // Set the current date as the end date (after one month or longer)
+      }),
+    });
+
+    const upgradeData = await upgradeResponse.json();
+
+    if (upgradeResponse.ok) {
+      toast({
+        title: "Plan Upgraded",
+        description: "Your plan has been upgraded to Premium.",
+        variant: "success",
+      });
+    } else {
+      toast({
+        title: "Upgrade Failed",
+        description: upgradeData.error || "Something went wrong with the plan upgrade.",
+        variant: "destructive",
+      });
     }
   };
 

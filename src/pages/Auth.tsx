@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import LoginForm from "@/components/auth/LoginForm";
-import  SignupForm  from "@/components/auth/SignupForm";
+import SignupForm from "@/components/auth/SignupForm";
 import { useLocation, Redirect } from "wouter";
 import { useAuth } from "@/contexts/AuthContext";
 import { AnimatedContainer } from "@/components/ui/animated-container";
@@ -9,15 +9,16 @@ const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [location] = useLocation();
   const { user, loading } = useAuth();
-useEffect(() => {
-  // Parse the URL search parameters properly
-  const searchParams = new URLSearchParams(window.location.search);
-  const hasSignupParam = searchParams.get("signup") === "true";
-  
-  if (hasSignupParam) {
-    setIsLogin(false);
-  }
-}, [location]);
+
+  useEffect(() => {
+    // Parse the URL search parameters properly
+    const searchParams = new URLSearchParams(window.location.search);
+    const hasSignupParam = searchParams.get("signup") === "true";
+    
+    if (hasSignupParam) {
+      setIsLogin(false);
+    }
+  }, [location]);
 
   const toggleForm = () => setIsLogin(!isLogin);
 
