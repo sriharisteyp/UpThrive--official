@@ -236,93 +236,9 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">Your Dashboard</h1>
           
-          {/* Progress Overview Cards */}
-          {selectedCareer && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <Card>
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Trophy className="h-5 w-5 text-green-500" />
-                      Completion Rate
-                    </CardTitle>
-                    <span className="text-2xl font-bold text-green-500">
-                      {progressStats.completionRate.toFixed(0)}%
-                    </span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <Progress 
-                    value={progressStats.completionRate} 
-                    className="h-2 mt-2"
-                  />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Target className="h-5 w-5 text-blue-500" />
-                      Tasks Completed
-                    </CardTitle>
-                    <span className="text-2xl font-bold text-blue-500">
-                      {progressStats.completed}/{roadmapItems.length}
-                    </span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-sm text-muted-foreground">
-                    {progressStats.inProgress} in progress
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-yellow-500" />
-                      Est. Time Left
-                    </CardTitle>
-                    <span className="text-2xl font-bold text-yellow-500">
-                      {progressStats.estimatedTimeLeft.toFixed(1)}m
-                    </span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-sm text-muted-foreground">
-                    Estimated months remaining
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <CircleDot className="h-5 w-5 text-purple-500" />
-                      Next Milestone
-                    </CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-sm text-muted-foreground">
-                    {roadmapItems.find(item => 
-                      userData.roadmapProgress?.[item.title] !== 'completed'
-                    )?.title || 'All complete!'}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+          
 
           <Tabs defaultValue="overview" className="mb-8">
-            <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="progress">Progress</TabsTrigger>
-            </TabsList>
 
             <TabsContent value="overview">
               {/* Existing dashboard content */}

@@ -321,7 +321,7 @@ const AboutUs = () => {
         {/* End of Combined Mission & Vision Section */}
 
         {/* The original "Our Vision Section" below is now part of the combined section above and can be removed if it was standalone */}
-        {/* 
+         
         <section className="py-16 md:py-24 bg-darkBlue">
           <div className="container px-4">
             <div className="max-w-3xl mx-auto text-center">
@@ -352,7 +352,7 @@ const AboutUs = () => {
             </div>
           </div>
         </section> 
-        */}
+        
       </main>
     </div>
   );

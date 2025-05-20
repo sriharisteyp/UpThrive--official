@@ -17,8 +17,28 @@ const config: Config = {
       screens: {
         "2xl": "1400px",
       },
-    },
-    extend: {
+    }, extend: {
+      keyframes: {
+        'spin-reverse': {
+          from: { transform: 'rotate(360deg)' },
+          to: { transform: 'rotate(0deg)' },
+        },
+        'loader': {
+          '0%': {
+            transform: 'rotate(45deg) scale(1)',
+          },
+          '50%': {
+            transform: 'rotate(225deg) scale(0.5)',
+          },
+          '100%': {
+            transform: 'rotate(405deg) scale(1)',
+          },
+        },
+      },
+      animation: {
+        'spin-reverse': 'spin-reverse 1s linear infinite',
+        'loader': 'loader 2.5s ease-in-out infinite',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -26,7 +46,7 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         darkBlue: {
-          DEFAULT: "#111827", 
+          DEFAULT: "#111827",
           light: "#f8f9fa",
         },
         light: {
